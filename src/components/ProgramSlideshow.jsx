@@ -7,6 +7,10 @@ function inferTypeFromSrc(src) {
   return "image";
 }
 
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
+}
+
 export default function ProgramSlideshow({
   slides = [],
   holdMs = 4000,
@@ -18,6 +22,10 @@ export default function ProgramSlideshow({
   startDelayMs = 0,
   showTitle = true,
   fit = "contain", // "contain" | "cover"
+
+  // Optional: if provided, locks the frame to this aspect ratio.
+  // If NOT provided, locks the frame to the container's aspect ratio (fills the slot).
+  stageAspect,
 }) {
   const safeSlides = useMemo(() => {
     return (slides || [])
@@ -41,7 +49,6 @@ export default function ProgramSlideshow({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [incomingIndex, setIncomingIndex] = useState(null);
 
-  const aspectMapRef = useRef(new Map()); // src -> aspect
   const shellRef = useRef(null);
   const [available, setAvailable] = useState({ w: 1200, h: 700 });
   const [stageSize, setStageSize] = useState({ w: 1100, h: 650 });
@@ -53,7 +60,7 @@ export default function ProgramSlideshow({
   const commitTimeoutRef = useRef(null);
   const primedRef = useRef(false);
 
-  // ✅ video refs (current + incoming)
+  // video refs (current + incoming)
   const currentVideoRef = useRef(null);
   const incomingVideoRef = useRef(null);
 
@@ -99,19 +106,17 @@ export default function ProgramSlideshow({
     const current = safeSlides[currentRef.current];
     const delayStart = useStartDelay ? Math.max(0, Number(startDelayMs) || 0) : 0;
 
-    // ✅ If current is a VIDEO: do NOT use holdMs. We wait for the video 'ended' event.
+    // VIDEO: advance only on 'ended' (still respect initial delay)
     if (current?.type === "video") {
-      // Still respect the initial startDelayMs before we even start considering next.
-      // (Video should already be playing; this just prevents early transitions.)
       if (delayStart > 0) {
         holdTimeoutRef.current = setTimeout(() => {
-          // no-op: after delay, the 'ended' handler will be the only thing that advances
+          // no-op: 'ended' advances
         }, delayStart);
       }
       return;
     }
 
-    // ✅ Image path: normal hold timer
+    // IMAGE: normal hold timer
     holdTimeoutRef.current = setTimeout(() => {
       beginTransitionToNext();
     }, delayStart + holdMs);
@@ -163,12 +168,7 @@ export default function ProgramSlideshow({
     };
   }, []);
 
-  const getAspectForSrc = (src) => {
-    const a = aspectMapRef.current.get(src);
-    return a && Number.isFinite(a) && a > 0 ? a : 16 / 9;
-  };
-
-  const computeStageSize = (aspect, availW, availH) => {
+  const computeStageSizeFixed = (aspect, availW, availH) => {
     const maxW = Math.min(maxWidthPx, Math.floor(availW * 1.0));
     const maxH = Math.min(
       Math.floor(window.innerHeight * (maxHeightVh / 100)),
@@ -189,65 +189,34 @@ export default function ProgramSlideshow({
     return { w, h };
   };
 
+  // Compute a single fixed frame aspect for this slideshow
   useEffect(() => {
     if (!hasSlides) return;
 
-    const current = safeSlides[currentIndex];
-    const incoming = incomingIndex !== null ? safeSlides[incomingIndex] : null;
+    const containerAspect = available.w / available.h;
+    const autoAspect = clamp(containerAspect, 0.45, 2.4);
+    const forced = Number(stageAspect);
 
-    const targetSrc = incoming ? incoming.src : current.src;
-    const aspect = getAspectForSrc(targetSrc);
+    const aspectToUse =
+      Number.isFinite(forced) && forced > 0 ? forced : autoAspect;
 
-    setStageSize(computeStageSize(aspect, available.w, available.h));
+    setStageSize(computeStageSizeFixed(aspectToUse, available.w, available.h));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [available.w, available.h, currentIndex, incomingIndex, hasSlides, safeSlides.length]);
+  }, [available.w, available.h, hasSlides, stageAspect, maxWidthPx, maxHeightVh]);
 
-  const onImgLoad = (e, src) => {
-    const img = e.currentTarget;
-    if (!img?.naturalWidth || !img?.naturalHeight) return;
-
-    const aspect = img.naturalWidth / img.naturalHeight;
-    aspectMapRef.current.set(src, aspect);
-
-    const current = safeSlides[currentIndex]?.src;
-    const incoming = incomingIndex !== null ? safeSlides[incomingIndex]?.src : null;
-    const targetSrc = incoming ?? current;
-
-    if (src === targetSrc) {
-      setStageSize(computeStageSize(aspect, available.w, available.h));
-    }
-  };
-
-  const onVideoMeta = (e, src) => {
-    const v = e.currentTarget;
-    if (!v?.videoWidth || !v?.videoHeight) return;
-
-    const aspect = v.videoWidth / v.videoHeight;
-    aspectMapRef.current.set(src, aspect);
-
-    const current = safeSlides[currentIndex]?.src;
-    const incoming = incomingIndex !== null ? safeSlides[incomingIndex]?.src : null;
-    const targetSrc = incoming ?? current;
-
-    if (src === targetSrc) {
-      setStageSize(computeStageSize(aspect, available.w, available.h));
-    }
-  };
-
-  // ✅ When the CURRENT video ends, advance (but only if not already transitioning)
+  // When the CURRENT video ends, advance
   const handleCurrentVideoEnded = () => {
     if (!hasSlides || safeSlides.length <= 1) return;
     if (isTransitioning()) return;
     beginTransitionToNext();
   };
 
-  // ✅ Ensure the current video plays when it becomes current
+  // Ensure the current video plays when it becomes current
   useEffect(() => {
     if (!hasSlides) return;
     const current = safeSlides[currentIndex];
     if (current?.type !== "video") return;
 
-    // stop any old timers (we wait for 'ended')
     clearTimers();
 
     const v = currentVideoRef.current;
@@ -256,7 +225,6 @@ export default function ProgramSlideshow({
       v.volume = 0;
       v.playsInline = true;
 
-      // restart from beginning whenever it becomes the current slide
       try {
         v.currentTime = 0;
       } catch {
@@ -267,23 +235,21 @@ export default function ProgramSlideshow({
         try {
           await v.play();
         } catch {
-          // Autoplay can fail in some environments; signage browsers usually allow it.
+          // ignore
         }
       };
 
-      // slight defer helps in some browsers
       setTimeout(play, 0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, hasSlides]);
 
-  // ✅ If current is video, don't run image scheduling; (re)prime the cycle
+  // If current is image, ensure we are scheduled
   useEffect(() => {
     if (!hasSlides) return;
     const current = safeSlides[currentIndex];
     if (current?.type === "video") return;
 
-    // If image slide, ensure we are scheduled
     scheduleNextCycle(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, hasSlides]);
@@ -302,8 +268,28 @@ export default function ProgramSlideshow({
   const current = safeSlides[currentIndex];
   const incoming = incomingIndex !== null ? safeSlides[incomingIndex] : null;
 
-  const z = Math.max(1, Math.min(1.2, Number(zoom) || 1.0));
   const fitSafe = fit === "cover" ? "cover" : "contain";
+
+  /**
+   * ✅ GUARANTEE "FULL IMAGE ALWAYS" WHEN fit="contain"
+   * - contain: never allow zoom-in (would crop). Only allow zoom-out.
+   * - cover: allow zoom either direction.
+   */
+  const zCover = clamp(Number(zoom) || 1.0, 0.72, 1.2);
+  const zContain = clamp(Number(zoom) || 1.0, 0.72, 1.0); // <= 1.0 ONLY
+
+  // For contain, only apply transform if zooming OUT (<1). If 1, use no transform.
+  const transformForMedia =
+    fitSafe === "cover"
+      ? `scale(${zCover})`
+      : zContain < 1
+      ? `scale(${zContain})`
+      : "none";
+
+  // Blur + overlay look great for "cover" ads.
+  // For "contain" (main), keep it clean so letterbox/pillarbox reads correctly.
+  const useBlurBg = fitSafe === "cover";
+  const useOverlay = fitSafe === "cover";
 
   const layerExitStyle = incoming
     ? {
@@ -321,6 +307,12 @@ export default function ProgramSlideshow({
     animationFillMode: "forwards",
   };
 
+  const commonMediaStyle = {
+    objectFit: fitSafe,
+    objectPosition: "center center",
+    transform: "none",
+  };
+
   return (
     <div ref={shellRef} className="waShowShell" aria-label="Program slideshow">
       <div
@@ -333,13 +325,15 @@ export default function ProgramSlideshow({
       >
         {/* Current */}
         <div className="waSlideLayer" style={layerExitStyle}>
-          <div
-            className="waBlurBg"
-            style={{
-              backgroundImage: current.type === "image" ? `url(${current.src})` : undefined,
-            }}
-            aria-hidden="true"
-          />
+          {useBlurBg && (
+            <div
+              className="waBlurBg"
+              style={{
+                backgroundImage: current.type === "image" ? `url(${current.src})` : undefined,
+              }}
+              aria-hidden="true"
+            />
+          )}
 
           {current.type === "video" ? (
             <video
@@ -350,12 +344,8 @@ export default function ProgramSlideshow({
               playsInline
               preload="auto"
               controls={false}
-              onLoadedMetadata={(e) => onVideoMeta(e, current.src)}
               onEnded={handleCurrentVideoEnded}
-              style={{
-                transform: `scale(${z})`,
-                objectFit: fitSafe,
-              }}
+              style={commonMediaStyle}
             />
           ) : (
             <img
@@ -363,11 +353,7 @@ export default function ProgramSlideshow({
               src={current.src}
               alt={`Slide ${currentIndex + 1}`}
               draggable="false"
-              onLoad={(e) => onImgLoad(e, current.src)}
-              style={{
-                transform: `scale(${z})`,
-                objectFit: fitSafe,
-              }}
+              style={commonMediaStyle}
             />
           )}
         </div>
@@ -375,13 +361,15 @@ export default function ProgramSlideshow({
         {/* Incoming */}
         {incoming && (
           <div className="waSlideLayer" style={layerEnterStyle}>
-            <div
-              className="waBlurBg"
-              style={{
-                backgroundImage: incoming.type === "image" ? `url(${incoming.src})` : undefined,
-              }}
-              aria-hidden="true"
-            />
+            {useBlurBg && (
+              <div
+                className="waBlurBg"
+                style={{
+                  backgroundImage: incoming.type === "image" ? `url(${incoming.src})` : undefined,
+                }}
+                aria-hidden="true"
+              />
+            )}
 
             {incoming.type === "video" ? (
               <video
@@ -392,12 +380,7 @@ export default function ProgramSlideshow({
                 playsInline
                 preload="auto"
                 controls={false}
-                // NOTE: we don't auto-play incoming; it will play when it becomes current
-                onLoadedMetadata={(e) => onVideoMeta(e, incoming.src)}
-                style={{
-                  transform: `scale(${z})`,
-                  objectFit: fitSafe,
-                }}
+                style={commonMediaStyle}
               />
             ) : (
               <img
@@ -405,19 +388,14 @@ export default function ProgramSlideshow({
                 src={incoming.src}
                 alt={`Slide ${incomingIndex + 1}`}
                 draggable="false"
-                onLoad={(e) => onImgLoad(e, incoming.src)}
-                style={{
-                  transform: `scale(${z})`,
-                  objectFit: fitSafe,
-                }}
+                style={commonMediaStyle}
               />
             )}
           </div>
         )}
 
-        <div className="waOverlay" />
+        {useOverlay && <div className="waOverlay" />}
 
-        {/* Title pill (optional) */}
         {showTitle && (
           <div className="waSlideTitlePill" aria-hidden="true">
             <span className="waSlideTitleText">{current.title || ""}</span>

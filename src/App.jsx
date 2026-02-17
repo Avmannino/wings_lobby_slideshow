@@ -13,8 +13,8 @@ import three from "./assets/slides/3.jpg";
 import four from "./assets/slides/4.jpg";
 import five from "./assets/slides/5.jpg";
 
-// ✅ OPTIONAL: example mp4s (put your mp4s in /src/assets/slides/)
-// import hypeVid from "./assets/slides/learntoskate.mp4";
+// Videos
+import ltsVid from "./assets/slides/learntoskate.mp4";
 // import zamVid from "./assets/slides/zam.mp4";
 
 // ✅ Ads
@@ -29,7 +29,7 @@ export default function App() {
   // Videos autoplay muted and will ALWAYS play fully before advancing.
   const slides = [
     { src: one, title: "WELCOME" },
-    // { src: hypeVid, title: "HIGHLIGHTS" }, // ✅ example mp4
+    { src: ltsVid, title: "Learn To Skate" },
     { src: two, title: "COMMUNITY" },
     { src: three, title: "PROGRAMS" },
     // { src: zamVid, title: "" },            // ✅ example mp4 (blank pill)
@@ -44,7 +44,7 @@ export default function App() {
   // ✅ 50% slower transition than before (700ms → 1050ms)
   const MAIN_ANIM = 1050;
 
-  const ADS_HOLD = MAIN_HOLD * 3; // 19500ms
+  const ADS_HOLD = MAIN_HOLD * 2; // 19500ms
   const ADS_ANIM = 1500;          // keep as-is (already slow)
   const ADS_DELAY = 4200;
 

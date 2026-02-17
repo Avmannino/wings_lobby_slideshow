@@ -120,6 +120,20 @@ body {
   filter: drop-shadow(0 14px 40px rgba(0, 0, 0, 0.55));
 }
 
+/* ✅ NEW: small logo pinned to the far right */
+.waHeaderLogoRight {
+  position: absolute;
+  left: 28px;          /* matches header padding */
+  top: 50%;
+  transform: translateY(-50%);
+  height: 126px;         /* adjust this to taste */
+  width: auto;
+  object-fit: contain;
+  z-index: 25;          /* above header bg */
+  filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.55));
+  opacity: 0.95;
+}
+
 /* ===== Main layout ===== */
 .waMain {
   flex: 1;

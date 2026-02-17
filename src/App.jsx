@@ -6,6 +6,9 @@ import ProgramSlideshow from "./components/ProgramSlideshow";
 // ✅ Header wordmark image
 import headerWordmark from "./assets/welcometowings.png";
 
+// ✅ NEW: small logo on the right (add this file)
+import headerLogoRight from "./assets/wings-logo.png";
+
 // Center Slides (images)
 import one from "./assets/slides/1.jpeg";
 import two from "./assets/slides/2.png";
@@ -72,6 +75,14 @@ export default function App() {
           alt="Welcome to Wings Arena"
           draggable="false"
         />
+
+        {/* ✅ NEW: Right-side header logo */}
+        <img
+          className="waHeaderLogoRight"
+          src={headerLogoRight}
+          alt="Wings Arena"
+          draggable="false"
+        />
       </header>
 
       <main className="waMain waMainSplitOneAd">
@@ -86,7 +97,7 @@ export default function App() {
               maxWidthPx={2800}
               maxHeightVh={82}
               zoom={1.0}
-              showTitle={false}  // ✅ COMMENTED OUT (pill/title)
+              showTitle={false} // ✅ COMMENTED OUT (pill/title)
               fit="cover"
             />
           </div>

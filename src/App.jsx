@@ -15,6 +15,7 @@ import five from "./assets/slides/5.jpg";
 import six from "./assets/slides/6.jpg";
 import seven from "./assets/slides/7.jpg";
 import eight from "./assets/slides/8.jpg";
+import nine from "./assets/slides/9.jpeg";
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
@@ -26,6 +27,8 @@ import ad2 from "./assets/ads/2.png";
 import ad3 from "./assets/ads/3.jpg";
 import ad4 from "./assets/ads/4.png";
 import ad5 from "./assets/ads/5.avif";
+import ad6 from "./assets/ads/6.png";
+import ad7 from "./assets/ads/7.png";
 
 export default function App() {
   const slides = [
@@ -38,12 +41,13 @@ export default function App() {
     { src: six, title: "Figure Skating" },
     { src: seven, title: "Figure Skating" },
     { src: eight, title: "Figure Skating" },
+    { src: nine, title: "Wings @ Night" },
     { src: ltsVid, title: "Learn To Skate" },
   ];
 
-  const adSlides = [ad1, ad2, ad3, ad4, ad5];
+  const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7];
 
-  const MAIN_HOLD = 6500;
+  const MAIN_HOLD = 4500;
   const MAIN_ANIM = 1050;
 
   const ADS_HOLD = MAIN_HOLD * 2; // 19500ms
@@ -71,10 +75,10 @@ export default function App() {
               animMs={MAIN_ANIM}
               startDelayMs={0}
               maxWidthPx={2800}
-              maxHeightVh={78}
+              maxHeightVh={82}
               zoom={1.0}
-              showTitle={true}
-              fit="contain"
+              showTitle={false}  // ✅ COMMENTED OUT (pill/title)
+              fit="cover"
             />
           </div>
         </section>
@@ -88,10 +92,10 @@ export default function App() {
               animMs={ADS_ANIM}
               startDelayMs={ADS_DELAY}
               maxWidthPx={980}
-              maxHeightVh={85}
-              zoom={0.9}          /* ✅ zoom out a bit */
+              maxHeightVh={90}
+              zoom={1.0} /* ✅ zoom out a bit */
               showTitle={false}
-              fit="contain"       /* ✅ no cropping; full ad fits */
+              fit="cover" /* ✅ no cropping; full ad fits */
             />
           </div>
         </aside>

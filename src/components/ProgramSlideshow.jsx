@@ -1,3 +1,4 @@
+// src/components/ProgramSlideshow.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function ProgramSlideshow({
@@ -5,12 +6,15 @@ export default function ProgramSlideshow({
   holdMs = 6500,
   animMs = 700,
   zoom = 1.08,
-  maxWidthPx = 1670, // ✅ was 1450 (~15% wider)
-  maxHeightVh = 72,
+  maxWidthPx = 2400,
+  maxHeightVh = 78,
 }) {
   const safeSlides = useMemo(() => {
     return (slides || [])
-      .map((s) => (typeof s === "string" ? { src: s } : s))
+      .map((s) => {
+        if (typeof s === "string") return { src: s, title: "" };
+        return { src: s?.src, title: s?.title ?? "" };
+      })
       .filter((s) => s && s.src);
   }, [slides]);
 
@@ -20,7 +24,6 @@ export default function ProgramSlideshow({
   const [incomingIndex, setIncomingIndex] = useState(null);
 
   const aspectMapRef = useRef(new Map()); // src -> aspect
-
   const shellRef = useRef(null);
   const [available, setAvailable] = useState({ w: 1200, h: 700 });
   const [stageSize, setStageSize] = useState({ w: 1100, h: 650 });
@@ -117,13 +120,12 @@ export default function ProgramSlideshow({
   };
 
   const computeStageSize = (aspect, availW, availH) => {
-    // ✅ allow more width usage than before (was 0.92)
-    const maxW = Math.min(maxWidthPx, Math.floor(availW * 1.0));
+    // ✅ slightly less than full width so it doesn't feel jammed
+    const maxW = Math.min(maxWidthPx, Math.floor(availW * 0.98));
 
-    // height cap stays the same
     const maxH = Math.min(
       Math.floor(window.innerHeight * (maxHeightVh / 100)),
-      Math.floor(availH * 0.92)
+      Math.floor(availH * 0.94)
     );
 
     let w = maxW;
@@ -171,10 +173,10 @@ export default function ProgramSlideshow({
 
   if (!hasSlides) {
     return (
-      <div style={styles.shellOuter}>
-        <div style={styles.empty}>
-          <div style={styles.emptyTitle}>No slides found</div>
-          <div style={styles.emptySub}>
+      <div className="waShowShell">
+        <div className="waEmpty">
+          <div className="waEmptyTitle">No slides found</div>
+          <div className="waEmptySub">
             Add images to /src/assets/slides and pass them into the slideshow.
           </div>
         </div>
@@ -185,60 +187,90 @@ export default function ProgramSlideshow({
   const current = safeSlides[currentIndex];
   const incoming = incomingIndex !== null ? safeSlides[incomingIndex] : null;
 
+  // ✅ show the title for the slide that is coming in (so it matches what the viewer sees)
+  const displaySlide = incoming ?? current;
+  const displayTitle = (displaySlide?.title ?? "").trim();
+
   const z = Math.max(1, Math.min(1.2, Number(zoom) || 1.08));
 
   return (
-    <div ref={shellRef} style={styles.shellOuter} aria-label="Program slideshow">
+    <div ref={shellRef} className="waShowShell" aria-label="Program slideshow">
       <div
+        className="waStage"
         style={{
-          ...styles.stage,
           width: stageSize.w,
           height: stageSize.h,
           transition: "width 260ms ease, height 260ms ease",
         }}
       >
-        {/* Current */}
+        {/* ✅ Title pill (35% of frame width, centered, above image) */}
         <div
+          className="waSlideTitlePill"
           style={{
-            ...styles.slideLayer,
+            width: "35%",
+          }}
+          aria-hidden={displayTitle.length === 0 ? "true" : "false"}
+        >
+          {/* If blank title, keep pill height by using a non-breaking space */}
+          <span className="waSlideTitleText">
+            {displayTitle.length ? displayTitle : "\u00A0"}
+          </span>
+        </div>
+
+        {/* Current layer */}
+        <div
+          className="waSlideLayer"
+          style={{
             ...(incoming ? styles.layerExitLeft : styles.layerStatic),
             animationDuration: `${animMs}ms`,
           }}
         >
+          <div
+            className="waBlurBg"
+            style={{ backgroundImage: `url(${current.src})` }}
+            aria-hidden="true"
+          />
           <img
+            className="waImg"
             src={current.src}
             alt={`Slide ${currentIndex + 1}`}
             draggable="false"
             onLoad={(e) => onImgLoad(e, current.src)}
-            style={{ ...styles.img, transform: `scale(${z})` }}
+            style={{ transform: `scale(${z})` }}
           />
         </div>
 
-        {/* Incoming */}
+        {/* Incoming layer */}
         {incoming && (
           <div
+            className="waSlideLayer"
             style={{
-              ...styles.slideLayer,
               ...styles.layerEnterRight,
               animationDuration: `${animMs}ms`,
             }}
           >
+            <div
+              className="waBlurBg"
+              style={{ backgroundImage: `url(${incoming.src})` }}
+              aria-hidden="true"
+            />
             <img
+              className="waImg"
               src={incoming.src}
               alt={`Slide ${incomingIndex + 1}`}
               draggable="false"
               onLoad={(e) => onImgLoad(e, incoming.src)}
-              style={{ ...styles.img, transform: `scale(${z})` }}
+              style={{ transform: `scale(${z})` }}
             />
           </div>
         )}
 
-        <div style={styles.overlay} />
+        <div className="waOverlay" />
       </div>
 
       <div
+        className="waFrame"
         style={{
-          ...styles.frame,
           width: stageSize.w,
           height: stageSize.h,
           transition: "width 260ms ease, height 260ms ease",
@@ -250,86 +282,28 @@ export default function ProgramSlideshow({
 }
 
 const styles = {
-  shellOuter: {
-    width: "100%",
-    height: "100%",
-    display: "grid",
-    placeItems: "center",
-    position: "relative",
-    overflow: "hidden",
-  },
-  stage: {
-    position: "relative",
-    borderRadius: 26,
-    overflow: "hidden",
-    boxShadow: "0 24px 70px rgba(0,0,0,0.55)",
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "#060A12",
-  },
-  slideLayer: {
-    position: "absolute",
-    inset: 0,
-    display: "grid",
-    placeItems: "center",
-    willChange: "transform",
-  },
   layerStatic: { transform: "translateX(0%)" },
   layerExitLeft: {
-    animationName: "slideOutLeft",
+    animationName: "waSlideOutLeft",
     animationTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
     animationFillMode: "forwards",
   },
   layerEnterRight: {
-    animationName: "slideInRight",
+    animationName: "waSlideInRight",
     animationTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
     animationFillMode: "forwards",
   },
-  img: {
-    width: "100%",
-    height: "100%",
-    objectFit: "contain",
-    objectPosition: "center",
-    display: "block",
-    userSelect: "none",
-    background: "#060A12",
-    willChange: "transform",
-  },
-  overlay: {
-    position: "absolute",
-    inset: 0,
-    background:
-      "linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.10) 55%, rgba(0,0,0,0.18) 100%)",
-    pointerEvents: "none",
-  },
-  frame: {
-    position: "absolute",
-    borderRadius: 26,
-    boxShadow:
-      "0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 60px rgba(255,255,255,0.04)",
-    pointerEvents: "none",
-  },
-  empty: {
-    width: "min(900px, 92vw)",
-    padding: 28,
-    borderRadius: 22,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(255,255,255,0.04)",
-    color: "white",
-    boxShadow: "0 28px 80px rgba(0,0,0,0.55)",
-  },
-  emptyTitle: { fontSize: 26, fontWeight: 800 },
-  emptySub: { marginTop: 8, opacity: 0.85, fontSize: 16 },
 };
 
-if (typeof document !== "undefined" && !document.getElementById("slideshowKF")) {
+if (typeof document !== "undefined" && !document.getElementById("waSlideshowKF")) {
   const styleTag = document.createElement("style");
-  styleTag.id = "slideshowKF";
+  styleTag.id = "waSlideshowKF";
   styleTag.innerHTML = `
-    @keyframes slideInRight {
+    @keyframes waSlideInRight {
       from { transform: translateX(100%); }
       to   { transform: translateX(0%); }
     }
-    @keyframes slideOutLeft {
+    @keyframes waSlideOutLeft {
       from { transform: translateX(0%); }
       to   { transform: translateX(-100%); }
     }

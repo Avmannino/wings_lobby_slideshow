@@ -12,6 +12,9 @@ import two from "./assets/slides/2.png";
 import three from "./assets/slides/3.jpg";
 import four from "./assets/slides/4.jpg";
 import five from "./assets/slides/5.jpg";
+import six from "./assets/slides/6.jpg";
+import seven from "./assets/slides/7.jpg";
+import eight from "./assets/slides/8.jpg";
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
@@ -31,6 +34,9 @@ export default function App() {
     { src: three, title: "GSC Mites League" },
     { src: four, title: "Learn To Skate" },
     { src: five, title: "Learn To Play" },
+    { src: six, title: "Figure Skating" },
+    { src: seven, title: "Figure Skating" },
+    { src: eight, title: "Figure Skating" },
     { src: ltsVid, title: "Learn To Skate" },
   ];
 

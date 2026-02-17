@@ -16,6 +16,10 @@ import six from "./assets/slides/6.jpg";
 import seven from "./assets/slides/7.jpg";
 import eight from "./assets/slides/8.jpg";
 import nine from "./assets/slides/9.jpeg";
+import ten from "./assets/slides/10.JPG";
+import eleven from "./assets/slides/11.JPG";
+import twelve from "./assets/slides/12.JPG";
+import thirteen from "./assets/slides/13.JPG";
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
@@ -29,6 +33,7 @@ import ad4 from "./assets/ads/4.png";
 import ad5 from "./assets/ads/5.avif";
 import ad6 from "./assets/ads/6.png";
 import ad7 from "./assets/ads/7.png";
+import ad8 from "./assets/ads/8.png";
 
 export default function App() {
   const slides = [
@@ -42,17 +47,21 @@ export default function App() {
     { src: seven, title: "Figure Skating" },
     { src: eight, title: "Figure Skating" },
     { src: nine, title: "Wings @ Night" },
+    { src: ten, title: "Wings Day" },
+    { src: eleven, title: "Wings @ Night" },
+    { src: twelve, title: "Wings @ Night" },
+    { src: thirteen, title: "Wings @ Night" },
     { src: ltsVid, title: "Learn To Skate" },
   ];
 
-  const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7];
+  const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8];
 
   const MAIN_HOLD = 4500;
   const MAIN_ANIM = 1050;
 
   const ADS_HOLD = MAIN_HOLD * 2; // 19500ms
   const ADS_ANIM = 1500;
-  const ADS_DELAY = 4200;
+  const ADS_DELAY = 3200;
 
   return (
     <div className="waPage">

@@ -18,7 +18,7 @@ import eight from "./assets/slides/8.jpg";
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
-// import zamVid from "./assets/slides/zam.mp4";
+import montageVid from "./assets/slides/wingsmontage.mp4";
 
 // ✅ Ads
 import ad1 from "./assets/ads/1.jpg";
@@ -34,6 +34,7 @@ export default function App() {
     { src: three, title: "GSC Mites League" },
     { src: four, title: "Learn To Skate" },
     { src: five, title: "Learn To Play" },
+    { src: montageVid, title: "Wings Arena" },
     { src: six, title: "Figure Skating" },
     { src: seven, title: "Figure Skating" },
     { src: eight, title: "Figure Skating" },

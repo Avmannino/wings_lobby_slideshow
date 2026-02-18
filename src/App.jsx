@@ -26,6 +26,13 @@ import ten from "./assets/slides/10.JPG";
 import eleven from "./assets/slides/11.JPG";
 import twelve from "./assets/slides/12.JPG";
 import thirteen from "./assets/slides/13.JPG";
+import fourteen from "./assets/slides/14.jpg";
+import fifteen from "./assets/slides/15.jpg";
+import sixteen from "./assets/slides/16.jpg";
+import seventeen from "./assets/slides/17.jpg";
+import eighteen from "./assets/slides/18.jpg";
+import nineteen from "./assets/slides/19.jpg";
+
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
@@ -58,11 +65,17 @@ export default function App() {
     { src: twelve, title: "Wings @ Night" },
     { src: thirteen, title: "Wings @ Night" },
     { src: ltsVid, title: "Learn To Skate" },
+    { src: fourteen, title: "Wings @ Night" },
+    { src: fifteen, title: "Wings @ Night" },
+    { src: sixteen, title: "Wings @ Night" },
+    { src: seventeen, title: "Wings @ Night" },
+    { src: eighteen, title: "Wings @ Night" },
+    { src: nineteen, title: "Wings @ Night" },
   ];
 
   const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8];
 
-  const MAIN_HOLD = 4500;
+  const MAIN_HOLD = 1500;
   const MAIN_ANIM = 1050;
 
   const ADS_HOLD = MAIN_HOLD * 2;

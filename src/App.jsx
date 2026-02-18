@@ -6,7 +6,7 @@ import ProgramSlideshow from "./components/ProgramSlideshow";
 // ✅ Header wordmark image
 import headerWordmark from "./assets/welcometowings.png";
 
-// ✅ NEW: small logo on the right (add this file)
+// ✅ small logo on the right
 import headerLogoRight from "./assets/wings-logo.png";
 
 // Center Slides (images)
@@ -62,7 +62,7 @@ export default function App() {
   const MAIN_HOLD = 4500;
   const MAIN_ANIM = 1050;
 
-  const ADS_HOLD = MAIN_HOLD * 2; // 19500ms
+  const ADS_HOLD = MAIN_HOLD * 2;
   const ADS_ANIM = 1500;
   const ADS_DELAY = 3200;
 
@@ -76,7 +76,7 @@ export default function App() {
           draggable="false"
         />
 
-        {/* ✅ NEW: Right-side header logo */}
+        {/* ✅ Right-side header logo */}
         <img
           className="waHeaderLogoRight"
           src={headerLogoRight}
@@ -97,8 +97,9 @@ export default function App() {
               maxWidthPx={2800}
               maxHeightVh={82}
               zoom={1.0}
-              showTitle={false} // ✅ COMMENTED OUT (pill/title)
+              showTitle={false}
               fit="cover"
+              stageAspect={16 / 9} // ✅ makes scaling much cleaner on MVIX 1080p
             />
           </div>
         </section>
@@ -113,9 +114,9 @@ export default function App() {
               startDelayMs={ADS_DELAY}
               maxWidthPx={980}
               maxHeightVh={90}
-              zoom={1.0} /* ✅ zoom out a bit */
+              zoom={1.0}
               showTitle={false}
-              fit="cover" /* ✅ no cropping; full ad fits */
+              fit="cover"
             />
           </div>
         </aside>

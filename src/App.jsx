@@ -64,7 +64,7 @@ export default function App() {
 
   const ADS_HOLD = MAIN_HOLD * 2;
   const ADS_ANIM = 1500;
-  const ADS_DELAY = 3200;
+  const ADS_DELAY = 2200;
 
   return (
     <div className="waPage">
@@ -99,7 +99,7 @@ export default function App() {
               zoom={1.0}
               showTitle={false}
               fit="cover"
-              stageAspect={16 / 9} // ✅ makes scaling much cleaner on MVIX 1080p
+              stageAspect={16 / 9} // ✅ keeps main clean on 1080p output
             />
           </div>
         </section>
@@ -117,6 +117,7 @@ export default function App() {
               zoom={1.0}
               showTitle={false}
               fit="cover"
+              stageAspect={6 / 8} // ✅ FIX: ad feels less tall/thin (poster-friendly)
             />
           </div>
         </aside>

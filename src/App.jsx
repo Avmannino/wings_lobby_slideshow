@@ -40,6 +40,18 @@ import twentyfour from "./assets/slides/24.jpg";
 import twentyfive from "./assets/slides/25.jpg";
 import twentysix from "./assets/slides/26.jpg";
 import twentyseven from "./assets/slides/27.jpg";
+import twentyeight from "./assets/slides/28.jpg";
+import twentynine from "./assets/slides/29.jpg";
+import thirty from "./assets/slides/30.jpg";
+import thirtyone from "./assets/slides/31.jpg";
+import thirtytwo from "./assets/slides/32.jpg";
+import thirtythree from "./assets/slides/33.jpg";
+import thirtyfour from "./assets/slides/34.jpg";
+import thirtyfive from "./assets/slides/35.jpg";
+import thirtysix from "./assets/slides/36.jpg";
+import thirtyseven from "./assets/slides/37.jpg";
+import thirtyeight from "./assets/slides/38.jpg";
+import thirtynine from "./assets/slides/39.jpg";
 
 
 // Videos
@@ -63,7 +75,7 @@ export default function App() {
     { src: three, title: "GSC Mites League" },
     { src: four, title: "Learn To Skate" },
     { src: five, title: "Learn To Play" },
-    { src: montageVid, title: "Wings Arena" },
+    // { src: montageVid, title: "Wings Arena" },
     { src: six, title: "Figure Skating" },
     { src: seven, title: "Figure Skating" },
     { src: eight, title: "Figure Skating" },
@@ -72,7 +84,7 @@ export default function App() {
     { src: eleven, title: "Wings @ Night" },
     { src: twelve, title: "Wings @ Night" },
     { src: thirteen, title: "Wings @ Night" },
-    { src: ltsVid, title: "Learn To Skate" },
+    // { src: ltsVid, title: "Learn To Skate" },
     { src: fourteen, title: "Wings @ Night" },
     { src: fifteen, title: "Wings @ Night" },
     { src: sixteen, title: "Wings @ Night" },
@@ -87,6 +99,19 @@ export default function App() {
     { src: twentyfive, title: "Wings @ Night" },
     { src: twentysix, title: "Wings @ Night" },
     { src: twentyseven, title: "Wings @ Night" },
+    { src: twentyeight, title: "Wings @ Night" },
+    { src: twentynine, title: "Wings @ Night" },
+    { src: twentyseven, title: "Wings @ Night" },
+    { src: thirty, title: "Wings @ Night" },
+    { src: thirtyone, title: "Wings @ Night" },
+    { src: thirtytwo, title: "Wings @ Night" }, 
+    { src: thirtythree, title: "Wings @ Night" },
+    { src: thirtyfour, title: "Wings @ Night" },
+    { src: thirtyfive, title: "Wings @ Night" },
+    { src: thirtysix, title: "Wings @ Night" },
+    { src: thirtyseven, title: "Wings @ Night" },
+    { src: thirtyeight, title: "Wings @ Night" },
+    { src: thirtynine, title: "Wings @ Night" },
   ];
 
   const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8];

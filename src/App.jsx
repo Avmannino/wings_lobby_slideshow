@@ -99,7 +99,7 @@ export default function App() {
               zoom={1.0}
               showTitle={false}
               fit="cover"
-              stageAspect={16 / 9} // ✅ keeps main clean on 1080p output
+              stageAspect={16 / 10} // ✅ keeps main clean on 1080p output
             />
           </div>
         </section>
@@ -117,7 +117,7 @@ export default function App() {
               zoom={1.0}
               showTitle={false}
               fit="cover"
-              stageAspect={6 / 8} // ✅ FIX: ad feels less tall/thin (poster-friendly)
+              stageAspect={4 / 5} // ✅ FIX: ad feels less tall/thin (poster-friendly)
             />
           </div>
         </aside>

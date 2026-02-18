@@ -66,7 +66,7 @@ body {
   position: relative;
   display: grid;
   place-items: center;
-  padding: 35px 28px;
+  padding: 50px 28px;
   text-align: center;
 
   background: linear-gradient(
@@ -122,10 +122,10 @@ body {
 
 .waHeaderLogoRight {
   position: absolute;
-  left: 28px;
+  left: 178px;
   top: 50%;
   transform: translateY(-50%);
-  height: 124px;
+  height: 154px;
   width: auto;
   object-fit: contain;
   z-index: 25;

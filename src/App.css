@@ -133,6 +133,18 @@ body {
   opacity: 0.95;
 }
 
+/* ✅ NEW: logo that sits right next to the header text */
+.waHeaderLogoInline {
+  position: absolute;
+  right: 178px;
+  height:154px;
+  display: block;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.55));
+  opacity: 0.98;
+}
+
 /* ===== Main layout ===== */
 .waMain {
   flex: 1;

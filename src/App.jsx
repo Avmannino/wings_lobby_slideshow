@@ -9,6 +9,9 @@ import headerWordmark from "./assets/welcometowings.png";
 // ✅ small logo on the right
 import headerLogoRight from "./assets/wings-logo.png";
 
+// ✅ NEW: logo that sits to the RIGHT of the header text (add this file)
+import headerLogoInline from "./assets/wings-logo.png";
+
 // Center Slides (images)
 import one from "./assets/slides/1.jpeg";
 import two from "./assets/slides/2.png";
@@ -81,6 +84,13 @@ export default function App() {
           className="waHeaderLogoRight"
           src={headerLogoRight}
           alt="Wings Arena"
+          draggable="false"
+        />
+
+        <img
+          className="waHeaderLogoInline"
+          src={headerLogoInline}
+          alt="Header logo"
           draggable="false"
         />
       </header>

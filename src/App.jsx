@@ -32,6 +32,14 @@ import sixteen from "./assets/slides/16.jpg";
 import seventeen from "./assets/slides/17.jpg";
 import eighteen from "./assets/slides/18.jpg";
 import nineteen from "./assets/slides/19.jpg";
+import twenty from "./assets/slides/20.jpg";
+import twentyone from "./assets/slides/21.jpg";
+import twentytwo from "./assets/slides/22.jpg";
+import twentythree from "./assets/slides/23.jpg";
+import twentyfour from "./assets/slides/24.jpg";
+import twentyfive from "./assets/slides/25.jpg";
+import twentysix from "./assets/slides/26.jpg";
+import twentyseven from "./assets/slides/27.jpg";
 
 
 // Videos
@@ -71,6 +79,14 @@ export default function App() {
     { src: seventeen, title: "Wings @ Night" },
     { src: eighteen, title: "Wings @ Night" },
     { src: nineteen, title: "Wings @ Night" },
+    { src: twenty, title: "Wings @ Night" },
+    { src: twentyone, title: "Wings @ Night" },
+    { src: twentytwo, title: "Wings @ Night" },
+    { src: twentythree, title: "Wings @ Night" },
+    { src: twentyfour, title: "Wings @ Night" },
+    { src: twentyfive, title: "Wings @ Night" },
+    { src: twentysix, title: "Wings @ Night" },
+    { src: twentyseven, title: "Wings @ Night" },
   ];
 
   const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8];

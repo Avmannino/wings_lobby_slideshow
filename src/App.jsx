@@ -75,7 +75,7 @@ export default function App() {
     { src: three, title: "GSC Mites League" },
     { src: four, title: "Learn To Skate" },
     { src: five, title: "Learn To Play" },
-    // { src: montageVid, title: "Wings Arena" },
+    { src: montageVid, title: "Wings Arena" },
     { src: six, title: "Figure Skating" },
     { src: seven, title: "Figure Skating" },
     { src: eight, title: "Figure Skating" },
@@ -84,7 +84,7 @@ export default function App() {
     { src: eleven, title: "Wings @ Night" },
     { src: twelve, title: "Wings @ Night" },
     { src: thirteen, title: "Wings @ Night" },
-    // { src: ltsVid, title: "Learn To Skate" },
+    { src: ltsVid, title: "Learn To Skate" },
     { src: fourteen, title: "Wings @ Night" },
     { src: fifteen, title: "Wings @ Night" },
     { src: sixteen, title: "Wings @ Night" },
@@ -116,7 +116,7 @@ export default function App() {
 
   const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8];
 
-  const MAIN_HOLD = 1500;
+  const MAIN_HOLD = 2800;
   const MAIN_ANIM = 1050;
 
   const ADS_HOLD = MAIN_HOLD * 2;

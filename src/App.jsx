@@ -9,7 +9,7 @@ import headerWordmark from "./assets/welcometowings.png";
 // ✅ small logo on the right
 import headerLogoRight from "./assets/wings-logo.png";
 
-// ✅ NEW: logo that sits to the RIGHT of the header text (add this file)
+// ✅ logo that sits to the RIGHT of the header text
 import headerLogoInline from "./assets/wings-logo.png";
 
 // Center Slides (images)
@@ -52,7 +52,6 @@ import thirtysix from "./assets/slides/36.jpg";
 import thirtyseven from "./assets/slides/37.jpg";
 import thirtyeight from "./assets/slides/38.jpg";
 import thirtynine from "./assets/slides/39.jpg";
-
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
@@ -104,7 +103,7 @@ export default function App() {
     { src: twentyseven, title: "Wings @ Night" },
     { src: thirty, title: "Wings @ Night" },
     { src: thirtyone, title: "Wings @ Night" },
-    { src: thirtytwo, title: "Wings @ Night" }, 
+    { src: thirtytwo, title: "Wings @ Night" },
     { src: thirtythree, title: "Wings @ Night" },
     { src: thirtyfour, title: "Wings @ Night" },
     { src: thirtyfive, title: "Wings @ Night" },
@@ -117,10 +116,10 @@ export default function App() {
   const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8];
 
   const MAIN_HOLD = 2800;
-  const MAIN_ANIM = 1050;
+  const MAIN_ANIM = 650; // ✅ shorter + smoother crossfade
 
   const ADS_HOLD = MAIN_HOLD * 2;
-  const ADS_ANIM = 1500;
+  const ADS_ANIM = 900;
   const ADS_DELAY = 2200;
 
   return (
@@ -163,7 +162,9 @@ export default function App() {
               zoom={1.0}
               showTitle={false}
               fit="cover"
-              stageAspect={16 / 10} // ✅ keeps main clean on 1080p output
+              stageAspect={16 / 10}
+              transition="fade" // ✅ NEW: fade is the smoothest option
+              preloadCount={4}  // ✅ NEW: preload next N images
             />
           </div>
         </section>
@@ -181,7 +182,9 @@ export default function App() {
               zoom={1.0}
               showTitle={false}
               fit="cover"
-              stageAspect={4 / 5} // ✅ FIX: ad feels less tall/thin (poster-friendly)
+              stageAspect={8.5 / 11}
+              transition="fade"
+              preloadCount={2}
             />
           </div>
         </aside>

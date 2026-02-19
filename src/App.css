@@ -132,7 +132,6 @@ body {
   opacity: 0.95;
 }
 
-/* ✅ logo next to header text */
 .waHeaderLogoInline {
   position: absolute;
   right: 178px;
@@ -206,7 +205,6 @@ body {
   min-width: 0;
   min-height: 0;
 
-  /* ✅ keep painting isolated for smoother transitions */
   contain: layout paint size;
 }
 
@@ -217,7 +215,6 @@ body {
   background: var(--letterbox);
   box-shadow: var(--shadow);
 
-  /* ✅ ensure stage is on its own compositor layer */
   transform: translateZ(0);
   will-change: opacity, transform;
 }
@@ -242,7 +239,7 @@ body {
     0 18px 55px rgba(0, 0, 0, 0.35);
 }
 
-/* ✅ Fade layers (GPU-friendly: opacity only) */
+/* ✅ Fade layers (opacity-only = smooth) */
 .waSlideLayer {
   position: absolute;
   inset: 0;
@@ -282,7 +279,6 @@ body {
   position: relative;
   z-index: 2;
 
-  /* ✅ helps reduce shimmering/tearing during fades */
   backface-visibility: hidden;
 }
 
@@ -351,7 +347,6 @@ body {
     transform: rotate(0deg);
   }
 
-  /* ✅ keep it instant if reduced motion */
   .waLayerCurrentFadingOut,
   .waLayerIncomingFadingIn {
     transition: none !important;

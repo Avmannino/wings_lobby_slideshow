@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 function inferTypeFromSrc(src) {
   const s = String(src || "").toLowerCase();
-  if (s.includes(".mp4") || s.includes(".webm") || s.includes(".mov")) return "video";
+  if (s.includes(".mp4") || s.includes(".webm") || s.includes(".mov"))
+    return "video";
   return "image";
 }
 
@@ -26,6 +27,9 @@ export default function ProgramSlideshow({
   // Optional: if provided, locks the frame to this aspect ratio.
   // If NOT provided, locks the frame to the container's aspect ratio (fills the slot).
   stageAspect,
+
+  // ✅ NEW: allow choosing transition style
+  transition = "slide", // "slide" | "fade"
 }) {
   const safeSlides = useMemo(() => {
     return (slides || [])
@@ -48,6 +52,9 @@ export default function ProgramSlideshow({
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [incomingIndex, setIncomingIndex] = useState(null);
+
+  // ✅ NEW: drives the fade crossfade (ensures the browser "sees" opacity change)
+  const [fadeOn, setFadeOn] = useState(false);
 
   const shellRef = useRef(null);
   const [available, setAvailable] = useState({ w: 1200, h: 700 });
@@ -88,11 +95,19 @@ export default function ProgramSlideshow({
 
     const curr = currentRef.current;
     const next = (curr + 1) % safeSlides.length;
+
     setIncomingIndex(next);
+
+    // ✅ If fade mode, trigger opacity transition on next frame
+    if (transition === "fade") {
+      setFadeOn(false);
+      requestAnimationFrame(() => setFadeOn(true));
+    }
 
     commitTimeoutRef.current = setTimeout(() => {
       setCurrentIndex(next);
       setIncomingIndex(null);
+      setFadeOn(false);
       commitTimeoutRef.current = null;
 
       scheduleNextCycle(false);
@@ -104,7 +119,9 @@ export default function ProgramSlideshow({
     if (!hasSlides || safeSlides.length <= 1) return;
 
     const current = safeSlides[currentRef.current];
-    const delayStart = useStartDelay ? Math.max(0, Number(startDelayMs) || 0) : 0;
+    const delayStart = useStartDelay
+      ? Math.max(0, Number(startDelayMs) || 0)
+      : 0;
 
     // VIDEO: advance only on 'ended' (still respect initial delay)
     if (current?.type === "video") {
@@ -126,6 +143,7 @@ export default function ProgramSlideshow({
   useEffect(() => {
     setCurrentIndex(0);
     setIncomingIndex(null);
+    setFadeOn(false);
     currentRef.current = 0;
     incomingRef.current = null;
     primedRef.current = false;
@@ -141,7 +159,7 @@ export default function ProgramSlideshow({
 
     return () => clearTimers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [holdMs, animMs, startDelayMs, safeSlides.length, hasSlides]);
+  }, [holdMs, animMs, startDelayMs, safeSlides.length, hasSlides, transition]);
 
   // Measure available space
   useEffect(() => {
@@ -259,7 +277,9 @@ export default function ProgramSlideshow({
       <div className="waShowShell">
         <div className="waEmpty">
           <div className="waEmptyTitle">No slides found</div>
-          <div className="waEmptySub">Add images/videos to /src/assets and pass them in.</div>
+          <div className="waEmptySub">
+            Add images/videos to /src/assets and pass them in.
+          </div>
         </div>
       </div>
     );
@@ -291,27 +311,52 @@ export default function ProgramSlideshow({
   const useBlurBg = fitSafe === "cover";
   const useOverlay = fitSafe === "cover";
 
-  const layerExitStyle = incoming
+  const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+  // ✅ SLIDE MODE (existing behavior)
+  const layerExitStyleSlide = incoming
     ? {
         animationName: "slideOutLeft",
         animationDuration: `${animMs}ms`,
-        animationTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+        animationTimingFunction: ease,
         animationFillMode: "forwards",
       }
     : {};
 
-  const layerEnterStyle = {
+  const layerEnterStyleSlide = {
     animationName: "slideInRight",
     animationDuration: `${animMs}ms`,
-    animationTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+    animationTimingFunction: ease,
     animationFillMode: "forwards",
+  };
+
+  // ✅ FADE MODE (new behavior)
+  // - current goes 1 -> 0
+  // - incoming goes 0 -> 1
+  const fadeCommon = {
+    transition: `opacity ${animMs}ms ${ease}`,
+    willChange: "opacity",
+  };
+
+  const layerCurrentFadeStyle = incoming
+    ? {
+        ...fadeCommon,
+        opacity: fadeOn ? 0 : 1,
+      }
+    : { opacity: 1 };
+
+  const layerIncomingFadeStyle = {
+    ...fadeCommon,
+    opacity: fadeOn ? 1 : 0,
   };
 
   const commonMediaStyle = {
     objectFit: fitSafe,
     objectPosition: "center center",
-    transform: "none",
+    transform: transformForMedia === "none" ? "none" : transformForMedia,
   };
+
+  const isFade = transition === "fade";
 
   return (
     <div ref={shellRef} className="waShowShell" aria-label="Program slideshow">
@@ -324,12 +369,16 @@ export default function ProgramSlideshow({
         }}
       >
         {/* Current */}
-        <div className="waSlideLayer" style={layerExitStyle}>
+        <div
+          className="waSlideLayer"
+          style={isFade ? layerCurrentFadeStyle : layerExitStyleSlide}
+        >
           {useBlurBg && (
             <div
               className="waBlurBg"
               style={{
-                backgroundImage: current.type === "image" ? `url(${current.src})` : undefined,
+                backgroundImage:
+                  current.type === "image" ? `url(${current.src})` : undefined,
               }}
               aria-hidden="true"
             />
@@ -353,6 +402,8 @@ export default function ProgramSlideshow({
               src={current.src}
               alt={`Slide ${currentIndex + 1}`}
               draggable="false"
+              decoding="async"
+              loading="eager"
               style={commonMediaStyle}
             />
           )}
@@ -360,12 +411,20 @@ export default function ProgramSlideshow({
 
         {/* Incoming */}
         {incoming && (
-          <div className="waSlideLayer" style={layerEnterStyle}>
+          <div
+            className="waSlideLayer"
+            // ✅ Important: when fading, ensure incoming is above current
+            style={{
+              ...(isFade ? layerIncomingFadeStyle : layerEnterStyleSlide),
+              ...(isFade ? { zIndex: 3 } : null),
+            }}
+          >
             {useBlurBg && (
               <div
                 className="waBlurBg"
                 style={{
-                  backgroundImage: incoming.type === "image" ? `url(${incoming.src})` : undefined,
+                  backgroundImage:
+                    incoming.type === "image" ? `url(${incoming.src})` : undefined,
                 }}
                 aria-hidden="true"
               />
@@ -388,6 +447,8 @@ export default function ProgramSlideshow({
                 src={incoming.src}
                 alt={`Slide ${incomingIndex + 1}`}
                 draggable="false"
+                decoding="async"
+                loading="eager"
                 style={commonMediaStyle}
               />
             )}
@@ -416,7 +477,7 @@ export default function ProgramSlideshow({
   );
 }
 
-/* Inject keyframes once */
+/* Inject keyframes once (slide mode only) */
 if (typeof document !== "undefined" && !document.getElementById("slideshowKF")) {
   const styleTag = document.createElement("style");
   styleTag.id = "slideshowKF";

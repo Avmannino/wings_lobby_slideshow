@@ -116,7 +116,7 @@ export default function App() {
   const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8];
 
   const MAIN_HOLD = 2800;
-  const MAIN_ANIM = 650; // ✅ shorter + smoother crossfade
+  const MAIN_ANIM = 650; // ✅ fade duration
 
   const ADS_HOLD = MAIN_HOLD * 2;
   const ADS_ANIM = 900;
@@ -163,8 +163,8 @@ export default function App() {
               showTitle={false}
               fit="cover"
               stageAspect={16 / 10}
-              transition="fade" // ✅ NEW: fade is the smoothest option
-              preloadCount={4}  // ✅ NEW: preload next N images
+              transition="fade" // ✅ MAIN: fade in/out
+              preloadCount={4}
             />
           </div>
         </section>

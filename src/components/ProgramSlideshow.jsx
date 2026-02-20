@@ -23,12 +23,9 @@ export default function ProgramSlideshow({
   startDelayMs = 0,
   showTitle = true,
   fit = "contain", // "contain" | "cover"
-
-  // Optional: if provided, locks the frame to this aspect ratio.
-  // If NOT provided, locks the frame to the container's aspect ratio (fills the slot).
   stageAspect,
 
-  // ✅ NEW: allow choosing transition style
+  // ✅ allow choosing transition style
   transition = "slide", // "slide" | "fade"
 }) {
   const safeSlides = useMemo(() => {
@@ -53,7 +50,7 @@ export default function ProgramSlideshow({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [incomingIndex, setIncomingIndex] = useState(null);
 
-  // ✅ NEW: drives the fade crossfade (ensures the browser "sees" opacity change)
+  // ✅ drives fade (ensures browser "sees" opacity change)
   const [fadeOn, setFadeOn] = useState(false);
 
   const shellRef = useRef(null);
@@ -67,9 +64,11 @@ export default function ProgramSlideshow({
   const commitTimeoutRef = useRef(null);
   const primedRef = useRef(false);
 
-  // video refs (current + incoming)
   const currentVideoRef = useRef(null);
   const incomingVideoRef = useRef(null);
+
+  const isFade = transition === "fade";
+  const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
 
   useEffect(() => {
     currentRef.current = currentIndex;
@@ -98,8 +97,8 @@ export default function ProgramSlideshow({
 
     setIncomingIndex(next);
 
-    // ✅ If fade mode, trigger opacity transition on next frame
-    if (transition === "fade") {
+    // ✅ Fade: kick opacity change on the next frame
+    if (isFade) {
       setFadeOn(false);
       requestAnimationFrame(() => setFadeOn(true));
     }
@@ -123,12 +122,10 @@ export default function ProgramSlideshow({
       ? Math.max(0, Number(startDelayMs) || 0)
       : 0;
 
-    // VIDEO: advance only on 'ended' (still respect initial delay)
+    // VIDEO: advance only on 'ended'
     if (current?.type === "video") {
       if (delayStart > 0) {
-        holdTimeoutRef.current = setTimeout(() => {
-          // no-op: 'ended' advances
-        }, delayStart);
+        holdTimeoutRef.current = setTimeout(() => {}, delayStart);
       }
       return;
     }
@@ -150,7 +147,7 @@ export default function ProgramSlideshow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [safeSlides.length]);
 
-  // Main timing loop (images schedule; videos advance on ended)
+  // Main timing loop
   useEffect(() => {
     const shouldUseDelay = !primedRef.current;
     primedRef.current = true;
@@ -207,7 +204,7 @@ export default function ProgramSlideshow({
     return { w, h };
   };
 
-  // Compute a single fixed frame aspect for this slideshow
+  // Compute fixed frame aspect
   useEffect(() => {
     if (!hasSlides) return;
 
@@ -222,14 +219,14 @@ export default function ProgramSlideshow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [available.w, available.h, hasSlides, stageAspect, maxWidthPx, maxHeightVh]);
 
-  // When the CURRENT video ends, advance
+  // When current video ends, advance
   const handleCurrentVideoEnded = () => {
     if (!hasSlides || safeSlides.length <= 1) return;
     if (isTransitioning()) return;
     beginTransitionToNext();
   };
 
-  // Ensure the current video plays when it becomes current
+  // Ensure current video plays
   useEffect(() => {
     if (!hasSlides) return;
     const current = safeSlides[currentIndex];
@@ -262,7 +259,7 @@ export default function ProgramSlideshow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, hasSlides]);
 
-  // If current is image, ensure we are scheduled
+  // If current is image, ensure scheduled
   useEffect(() => {
     if (!hasSlides) return;
     const current = safeSlides[currentIndex];
@@ -271,6 +268,27 @@ export default function ProgramSlideshow({
     scheduleNextCycle(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, hasSlides]);
+
+  // ✅ ONLY inject slide keyframes if we're actually using slide mode
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (transition !== "slide") return;
+    if (document.getElementById("slideshowKF")) return;
+
+    const styleTag = document.createElement("style");
+    styleTag.id = "slideshowKF";
+    styleTag.innerHTML = `
+      @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to   { transform: translateX(0%); }
+      }
+      @keyframes slideOutLeft {
+        from { transform: translateX(0%); }
+        to   { transform: translateX(-100%); }
+      }
+    `;
+    document.head.appendChild(styleTag);
+  }, [transition]);
 
   if (!hasSlides) {
     return (
@@ -290,15 +308,9 @@ export default function ProgramSlideshow({
 
   const fitSafe = fit === "cover" ? "cover" : "contain";
 
-  /**
-   * ✅ GUARANTEE "FULL IMAGE ALWAYS" WHEN fit="contain"
-   * - contain: never allow zoom-in (would crop). Only allow zoom-out.
-   * - cover: allow zoom either direction.
-   */
   const zCover = clamp(Number(zoom) || 1.0, 0.72, 1.2);
-  const zContain = clamp(Number(zoom) || 1.0, 0.72, 1.0); // <= 1.0 ONLY
+  const zContain = clamp(Number(zoom) || 1.0, 0.72, 1.0);
 
-  // For contain, only apply transform if zooming OUT (<1). If 1, use no transform.
   const transformForMedia =
     fitSafe === "cover"
       ? `scale(${zCover})`
@@ -306,14 +318,10 @@ export default function ProgramSlideshow({
       ? `scale(${zContain})`
       : "none";
 
-  // Blur + overlay look great for "cover" ads.
-  // For "contain" (main), keep it clean so letterbox/pillarbox reads correctly.
   const useBlurBg = fitSafe === "cover";
   const useOverlay = fitSafe === "cover";
 
-  const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
-
-  // ✅ SLIDE MODE (existing behavior)
+  // SLIDE
   const layerExitStyleSlide = incoming
     ? {
         animationName: "slideOutLeft",
@@ -330,19 +338,14 @@ export default function ProgramSlideshow({
     animationFillMode: "forwards",
   };
 
-  // ✅ FADE MODE (new behavior)
-  // - current goes 1 -> 0
-  // - incoming goes 0 -> 1
+  // FADE
   const fadeCommon = {
     transition: `opacity ${animMs}ms ${ease}`,
     willChange: "opacity",
   };
 
   const layerCurrentFadeStyle = incoming
-    ? {
-        ...fadeCommon,
-        opacity: fadeOn ? 0 : 1,
-      }
+    ? { ...fadeCommon, opacity: fadeOn ? 0 : 1 }
     : { opacity: 1 };
 
   const layerIncomingFadeStyle = {
@@ -355,8 +358,6 @@ export default function ProgramSlideshow({
     objectPosition: "center center",
     transform: transformForMedia === "none" ? "none" : transformForMedia,
   };
-
-  const isFade = transition === "fade";
 
   return (
     <div ref={shellRef} className="waShowShell" aria-label="Program slideshow">
@@ -413,7 +414,6 @@ export default function ProgramSlideshow({
         {incoming && (
           <div
             className="waSlideLayer"
-            // ✅ Important: when fading, ensure incoming is above current
             style={{
               ...(isFade ? layerIncomingFadeStyle : layerEnterStyleSlide),
               ...(isFade ? { zIndex: 3 } : null),
@@ -475,21 +475,4 @@ export default function ProgramSlideshow({
       />
     </div>
   );
-}
-
-/* Inject keyframes once (slide mode only) */
-if (typeof document !== "undefined" && !document.getElementById("slideshowKF")) {
-  const styleTag = document.createElement("style");
-  styleTag.id = "slideshowKF";
-  styleTag.innerHTML = `
-    @keyframes slideInRight {
-      from { transform: translateX(100%); }
-      to   { transform: translateX(0%); }
-    }
-    @keyframes slideOutLeft {
-      from { transform: translateX(0%); }
-      to   { transform: translateX(-100%); }
-    }
-  `;
-  document.head.appendChild(styleTag);
 }

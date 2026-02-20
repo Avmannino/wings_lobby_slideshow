@@ -132,7 +132,7 @@ export default function App() {
           draggable="false"
         />
 
-        {/* ✅ Right-side header logo */}
+        {/* ✅ Left-side header logo */}
         <img
           className="waHeaderLogoRight"
           src={headerLogoRight}
@@ -140,6 +140,7 @@ export default function App() {
           draggable="false"
         />
 
+        {/* ✅ Right-side header logo */}
         <img
           className="waHeaderLogoInline"
           src={headerLogoInline}
@@ -163,8 +164,7 @@ export default function App() {
               showTitle={false}
               fit="cover"
               stageAspect={16 / 10}
-              transition="fade" // ✅ MAIN: fade in/out
-              preloadCount={4}
+              transition="fade" // ✅ FORCE FADE (no sliding)
             />
           </div>
         </section>
@@ -183,8 +183,7 @@ export default function App() {
               showTitle={false}
               fit="cover"
               stageAspect={8.5 / 11}
-              transition="fade"
-              preloadCount={2}
+              transition="fade" // (optional) keep ads fading too
             />
           </div>
         </aside>

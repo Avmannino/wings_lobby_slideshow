@@ -56,7 +56,7 @@ import thirtynine from "./assets/slides/39.jpg";
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
 import montageVid from "./assets/slides/wingsmontage.mp4";
-import olympicsVid from "./assets/slides/olympics.mp4";
+// import olympicsVid from "./assets/slides/olympics.mp4";
 
 // ✅ Ads
 import ad1 from "./assets/ads/1.jpg";
@@ -72,7 +72,7 @@ import ad9 from "./assets/ads/9.png";
 export default function App() {
   const slides = [
     { src: one, title: "Wings Arena Adult Hockey League" },
-    { src: olympicsVid, title: "Wings Arena" },
+    // { src: olympicsVid, title: "Wings Arena" },
     { src: two, title: "Bantam Major - GOLD in Montreal!" },
     { src: three, title: "GSC Mites League" },
     { src: four, title: "Learn To Skate" },

@@ -68,6 +68,7 @@ import ad6 from "./assets/ads/6.png";
 import ad7 from "./assets/ads/7.png";
 import ad8 from "./assets/ads/8.png";
 import ad9 from "./assets/ads/9.png";
+import ad10 from "./assets/ads/10.png";
 
 export default function App() {
   const slides = [
@@ -117,7 +118,7 @@ export default function App() {
     { src: thirtynine, title: "Wings @ Night" },
   ];
 
-  const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9];
+  const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9,ad10];
 
   const MAIN_HOLD = 4500;
   const MAIN_ANIM = 1100; // ✅ slide duration

@@ -77,6 +77,7 @@ export default function App() {
     { src: three, title: "GSC Mites League" },
     { src: four, title: "Learn To Skate" },
     { src: five, title: "Learn To Play" },
+    { src: ltsVid, title: "Learn To Skate" },
     { src: montageVid, title: "Wings Arena" },
     { src: six, title: "Figure Skating" },
     { src: seven, title: "Figure Skating" },
@@ -86,7 +87,6 @@ export default function App() {
     { src: eleven, title: "Wings @ Night" },
     { src: twelve, title: "Wings @ Night" },
     { src: thirteen, title: "Wings @ Night" },
-    { src: ltsVid, title: "Learn To Skate" },
     { src: fourteen, title: "Wings @ Night" },
     { src: fifteen, title: "Wings @ Night" },
     { src: sixteen, title: "Wings @ Night" },
@@ -98,6 +98,7 @@ export default function App() {
     { src: twentytwo, title: "Wings @ Night" },
     { src: twentythree, title: "Wings @ Night" },
     { src: twentyfour, title: "Wings @ Night" },
+    { src: montageVid, title: "Wings Arena" },
     { src: twentyfive, title: "Wings @ Night" },
     { src: twentysix, title: "Wings @ Night" },
     { src: twentyseven, title: "Wings @ Night" },
@@ -119,7 +120,7 @@ export default function App() {
   const adSlides = [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9];
 
   const MAIN_HOLD = 4500;
-  const MAIN_ANIM = 350; // ✅ fade duration
+  const MAIN_ANIM = 1100; // ✅ slide duration
 
   const ADS_HOLD = MAIN_HOLD * 2;
   const ADS_ANIM = 900;
@@ -167,7 +168,7 @@ export default function App() {
               showTitle={false}
               fit="cover"
               stageAspect={16 / 10}
-              transition="fade" // ✅ FORCE FADE (no sliding)
+              transition="slide" // ✅ FORCE FADE (no sliding)
             />
           </div>
         </section>
@@ -186,7 +187,7 @@ export default function App() {
               showTitle={false}
               fit="cover"
               stageAspect={8.5 / 11}
-              transition="fade" // (optional) keep ads fading too
+              transition="slide" // (optional) keep ads fading too
             />
           </div>
         </aside>

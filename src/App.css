@@ -75,7 +75,7 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.10);
   backdrop-filter: blur(10px);
 
-  --laser-thickness: 1px;
+  --laser-thickness: 3px;
   --laser-length: 2500px;
   --laser-inset: 0px;
   --laser-red: #f0003f;

@@ -1,4 +1,5 @@
 // src/App.jsx
+import { useMemo } from "react";
 import "./App.css";
 
 import ProgramSlideshow from "./components/ProgramSlideshow";
@@ -52,6 +53,24 @@ import thirtysix from "./assets/slides/36.jpg";
 import thirtyseven from "./assets/slides/37.jpg";
 import thirtyeight from "./assets/slides/38.jpg";
 import thirtynine from "./assets/slides/39.jpg";
+import forty from "./assets/slides/40.jpg";
+import fortyone from "./assets/slides/41.jpg";
+import fortytwo from "./assets/slides/42.jpg";
+import fortythree from "./assets/slides/43.jpg";
+import fortyfour from "./assets/slides/44.jpg";
+import fortyfive from "./assets/slides/45.jpg";
+import fortysix from "./assets/slides/46.jpg";
+import fortyseven from "./assets/slides/47.jpg";
+import fortyeight from "./assets/slides/48.jpg";
+import fortynine from "./assets/slides/49.jpg";
+import fifty from "./assets/slides/50.jpg";
+import fiftyone from "./assets/slides/51.jpg";
+import fiftytwo from "./assets/slides/52.jpg";
+import fiftythree from "./assets/slides/53.jpg";
+import fiftyfour from "./assets/slides/54.jpg";
+import fiftyfive from "./assets/slides/55.jpg";
+import fiftysix from "./assets/slides/56.jpg";
+import fiftyseven from "./assets/slides/57.jpg";
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
@@ -62,6 +81,7 @@ import olympicsVid from "./assets/slides/olympics.mp4";
 import ad1 from "./assets/ads/1.jpg";
 import ad2 from "./assets/ads/2.png";
 import ad3 from "./assets/ads/3.jpg";
+import ad4 from "./assets/ads/4.png";
 import ad7 from "./assets/ads/7.png";
 import ad9 from "./assets/ads/9.png";
 import ad10 from "./assets/ads/10.png";
@@ -112,9 +132,36 @@ export default function App() {
     { src: thirtyseven, title: "Wings @ Night" },
     { src: thirtyeight, title: "Wings @ Night" },
     { src: thirtynine, title: "Wings @ Night" },
+    { src: forty, title: "Wings @ Night" },
+    { src: fortyone, title: "Wings @ Night" },
+    { src: fortytwo, title: "Wings @ Night" },
+    { src: fortythree, title: "Wings @ Night" },
+    { src: fortyfour, title: "Wings @ Night" },
+    { src: fortyfive, title: "Wings @ Night" },
+    { src: fortysix, title: "Wings @ Night" },
+    { src: fortyseven, title: "Wings @ Night" },
+    { src: fortyeight, title: "Wings @ Night" },
+    { src: fortynine, title: "Wings @ Night" },
+    { src: fifty, title: "Wings @ Night" },
+    { src: fiftyone, title: "Wings @ Night" },
+    { src: fiftytwo, title: "Wings @ Night" },
+    { src: fiftythree, title: "Wings @ Night" },
+    { src: fiftyfour, title: "Wings @ Night" },
+    { src: fiftyfive, title: "Wings @ Night" },
+    { src: fiftysix, title: "Wings @ Night" },
+    { src: fiftyseven, title: "Wings @ Night" },
   ];
 
-  const adSlides = [ad1, ad2, ad3, ad7, ad9, ad10];
+  const adSlides = [ad1, ad2, ad3, ad4, ad7, ad9, ad10];
+
+  const shuffledSlides = useMemo(() => {
+    const arr = [...slides];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }, []);
 
   const MAIN_HOLD = 4500;
   const MAIN_ANIM = 1100; // ✅ slide duration
@@ -155,7 +202,7 @@ export default function App() {
         <section className="waMainSlide" aria-label="Main slideshow">
           <div className="waSlideshowWrap">
             <ProgramSlideshow
-              slides={slides}
+              slides={shuffledSlides}
               holdMs={MAIN_HOLD}
               animMs={MAIN_ANIM}
               startDelayMs={0}

@@ -211,7 +211,7 @@ export default function App() {
               zoom={1.0}
               showTitle={false}
               fit="cover"
-              stageAspect={16 / 10}
+              stageAspect={16 / 10.6}
               transition="slide" // ✅ FORCE FADE (no sliding)
             />
           </div>

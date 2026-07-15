@@ -71,6 +71,27 @@ import fiftyfour from "./assets/slides/54.jpg";
 import fiftyfive from "./assets/slides/55.jpg";
 import fiftysix from "./assets/slides/56.jpg";
 import fiftyseven from "./assets/slides/57.jpg";
+import fiftyeight from "./assets/slides/58.jpg";
+import fiftynine from "./assets/slides/59.jpg";
+import sixty from "./assets/slides/60.jpg";
+import sixtyone from "./assets/slides/61.jpg";
+import sixtytwo from "./assets/slides/62.jpg";
+import sixtythree from "./assets/slides/63.jpg";
+import sixtyfour from "./assets/slides/64.JPG";
+import sixtyfive from "./assets/slides/65.jpg";
+import sixtysix from "./assets/slides/66.jpg";
+import sixtyseven from "./assets/slides/67.jpg";
+import sixtyeight from "./assets/slides/68.jpg";
+import sixtynine from "./assets/slides/69.jpg";
+import seventy from "./assets/slides/70.jpg";
+import seventyone from "./assets/slides/71.jpg";
+import seventytwo from "./assets/slides/72.jpg";
+import seventythree from "./assets/slides/73.jpg";
+import seventyfour from "./assets/slides/74.jpg";
+import seventyfive from "./assets/slides/75.jpg";
+import seventysix from "./assets/slides/76.jpg";
+import seventyseven from "./assets/slides/77.jpg";
+import seventyeight from "./assets/slides/78.jpg";
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
@@ -150,6 +171,27 @@ export default function App() {
     { src: fiftyfive, title: "Wings @ Night" },
     { src: fiftysix, title: "Wings @ Night" },
     { src: fiftyseven, title: "Wings @ Night" },
+    { src: fiftyeight, title: "Wings @ Night" },
+    { src: fiftynine, title: "Wings @ Night" },
+    { src: sixty, title: "Wings @ Night" },
+    { src: sixtyone, title: "Wings @ Night" },
+    { src: sixtytwo, title: "Wings @ Night" },
+    { src: sixtythree, title: "Wings @ Night" },
+    { src: sixtyfour, title: "Wings @ Night" },
+    { src: sixtyfive, title: "Wings @ Night" },
+    { src: sixtysix, title: "Wings @ Night" },
+    { src: sixtyseven, title: "Wings @ Night" },
+    { src: sixtyeight, title: "Wings @ Night" },
+    { src: sixtynine, title: "Wings @ Night" },
+    { src: seventy, title: "Wings @ Night" },
+    { src: seventyone, title: "Wings @ Night" },
+    { src: seventytwo, title: "Wings @ Night" },
+    { src: seventythree, title: "Wings @ Night" },
+    { src: seventyfour, title: "Wings @ Night" },
+    { src: seventyfive, title: "Wings @ Night" },
+    { src: seventysix, title: "Wings @ Night" },
+    { src: seventyseven, title: "Wings @ Night" },
+    { src: seventyeight, title: "Wings @ Night" },
   ];
 
   const adSlides = [ad1, ad2, ad3, ad4, ad7, ad9, ad10];

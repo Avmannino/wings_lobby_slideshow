@@ -12,6 +12,22 @@ function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
 }
 
+// Fisher-Yates shuffle of [0..n-1]. Every slide plays once per pass; when a new
+// pass is built we optionally forbid `avoidFirst` from landing in slot 0 so the
+// same slide never shows twice back-to-back across the loop boundary.
+function makeShuffledOrder(n, avoidFirst = null) {
+  const arr = Array.from({ length: n }, (_, i) => i);
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  if (avoidFirst != null && n > 1 && arr[0] === avoidFirst) {
+    const k = 1 + Math.floor(Math.random() * (n - 1));
+    [arr[0], arr[k]] = [arr[k], arr[0]];
+  }
+  return arr;
+}
+
 export default function ProgramSlideshow({
   slides = [],
   holdMs = 4000,
@@ -45,7 +61,21 @@ export default function ProgramSlideshow({
   const hasSlides = safeSlides.length > 0;
   const isFade = transition === "fade";
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Randomized play order: a shuffled permutation of slide indices that is
+  // regenerated each time we finish a full pass.
+  const orderRef = useRef(null);
+  const posRef = useRef(0);
+  if (
+    orderRef.current === null ||
+    orderRef.current.length !== safeSlides.length
+  ) {
+    orderRef.current = makeShuffledOrder(safeSlides.length);
+    posRef.current = 0;
+  }
+
+  const [currentIndex, setCurrentIndex] = useState(
+    () => orderRef.current[0] ?? 0
+  );
   const [incomingIndex, setIncomingIndex] = useState(null);
 
   // shared animation trigger (works for fade + slide)
@@ -181,7 +211,16 @@ export default function ProgramSlideshow({
     if (isTransitioning()) return;
 
     const curr = currentRef.current;
-    const next = (curr + 1) % safeSlides.length;
+
+    // Walk the shuffled order; when a full pass completes, reshuffle for the
+    // next pass (forbidding an immediate repeat of the slide just shown).
+    let nextPos = posRef.current + 1;
+    if (nextPos >= orderRef.current.length) {
+      orderRef.current = makeShuffledOrder(safeSlides.length, curr);
+      nextPos = 0;
+    }
+    posRef.current = nextPos;
+    const next = orderRef.current[nextPos];
     const nextSlide = safeSlides[next];
 
     // new transition token
@@ -209,10 +248,13 @@ export default function ProgramSlideshow({
   // Reset when slides array changes
   useEffect(() => {
     clearAll();
-    setCurrentIndex(0);
+    orderRef.current = makeShuffledOrder(safeSlides.length);
+    posRef.current = 0;
+    const first = orderRef.current[0] ?? 0;
+    setCurrentIndex(first);
     setIncomingIndex(null);
     setAnimOn(false);
-    currentRef.current = 0;
+    currentRef.current = first;
     incomingRef.current = null;
     primedRef.current = false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -353,8 +395,11 @@ export default function ProgramSlideshow({
     );
   }
 
-  const current = safeSlides[currentIndex];
-  const incoming = incomingIndex !== null ? safeSlides[incomingIndex] : null;
+  // Guard against a one-render window where currentIndex points past a
+  // just-shrunk slides array (before the reset effect re-syncs it).
+  const current = safeSlides[currentIndex] || safeSlides[0];
+  const incoming =
+    incomingIndex !== null ? safeSlides[incomingIndex] || null : null;
 
   const fitSafe = fit === "cover" ? "cover" : "contain";
 

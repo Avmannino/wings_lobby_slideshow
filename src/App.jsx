@@ -1,5 +1,4 @@
 // src/App.jsx
-import { useMemo } from "react";
 import "./App.css";
 
 import ProgramSlideshow from "./components/ProgramSlideshow";
@@ -214,14 +213,8 @@ export default function App() {
     portrait15,
   ];
 
-  const shuffledSlides = useMemo(() => {
-    const arr = [...slides];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }, []);
+  // Both slideshows shuffle internally (see ProgramSlideshow): every item plays
+  // once per pass, reshuffled each pass, no back-to-back repeats.
 
   const MAIN_HOLD = 4500;
   const MAIN_ANIM = 1100; // ✅ slide duration
@@ -262,7 +255,7 @@ export default function App() {
         <section className="waMainSlide" aria-label="Main slideshow">
           <div className="waSlideshowWrap">
             <ProgramSlideshow
-              slides={shuffledSlides}
+              slides={slides}
               holdMs={MAIN_HOLD}
               animMs={MAIN_ANIM}
               startDelayMs={0}

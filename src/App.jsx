@@ -65,11 +65,9 @@ import fortyeight from "./assets/slides/48.jpg";
 import fortynine from "./assets/slides/49.jpg";
 import fifty from "./assets/slides/50.jpg";
 import fiftyone from "./assets/slides/51.jpg";
-import fiftytwo from "./assets/slides/52.jpg";
 import fiftythree from "./assets/slides/53.jpg";
 import fiftyfour from "./assets/slides/54.jpg";
 import fiftyfive from "./assets/slides/55.jpg";
-import fiftysix from "./assets/slides/56.jpg";
 import fiftyseven from "./assets/slides/57.jpg";
 import fiftyeight from "./assets/slides/58.jpg";
 import fiftynine from "./assets/slides/59.jpg";
@@ -77,19 +75,11 @@ import sixty from "./assets/slides/60.jpg";
 import sixtyone from "./assets/slides/61.jpg";
 import sixtytwo from "./assets/slides/62.jpg";
 import sixtythree from "./assets/slides/63.jpg";
-import sixtyfour from "./assets/slides/64.JPG";
 import sixtyfive from "./assets/slides/65.jpg";
 import sixtysix from "./assets/slides/66.jpg";
 import sixtyseven from "./assets/slides/67.jpg";
 import sixtyeight from "./assets/slides/68.jpg";
-import sixtynine from "./assets/slides/69.jpg";
-import seventy from "./assets/slides/70.jpg";
-import seventyone from "./assets/slides/71.jpg";
-import seventytwo from "./assets/slides/72.jpg";
-import seventythree from "./assets/slides/73.jpg";
-import seventyfour from "./assets/slides/74.jpg";
 import seventyfive from "./assets/slides/75.jpg";
-import seventysix from "./assets/slides/76.jpg";
 import seventyseven from "./assets/slides/77.jpg";
 import seventyeight from "./assets/slides/78.jpg";
 
@@ -97,15 +87,31 @@ import seventyeight from "./assets/slides/78.jpg";
 import ltsVid from "./assets/slides/learntoskate.mp4";
 import montageVid from "./assets/slides/wingsmontage.mp4";
 import olympicsVid from "./assets/slides/olympics.mp4";
+import gcdsCelebrationVid from "./assets/slides/gcds-celebration.mp4";
 
 // ✅ Ads
 import ad1 from "./assets/ads/1.jpg";
 import ad2 from "./assets/ads/2.png";
 import ad3 from "./assets/ads/3.jpg";
-import ad4 from "./assets/ads/4.png";
 import ad7 from "./assets/ads/7.png";
 import ad9 from "./assets/ads/9.png";
-import ad10 from "./assets/ads/10.png";
+
+// ✅ Portrait photos shown in the (portrait) ad frame
+import portrait1 from "./assets/slides/52.jpg";
+import portrait2 from "./assets/slides/56.jpg";
+import portrait3 from "./assets/slides/64.JPG";
+import portrait4 from "./assets/slides/69.jpg";
+import portrait5 from "./assets/slides/70.jpg";
+import portrait6 from "./assets/slides/71.jpg";
+import portrait7 from "./assets/slides/72.jpg";
+import portrait8 from "./assets/slides/73.jpg";
+import portrait9 from "./assets/slides/74.jpg";
+import portrait10 from "./assets/slides/79.jpeg";
+import portrait11 from "./assets/slides/80.jpeg";
+import portrait12 from "./assets/slides/81.jpeg";
+import portrait13 from "./assets/slides/76.jpg";
+import portrait14 from "./assets/slides/84.jpeg";
+import portrait15 from "./assets/slides/85.jpg";
 
 export default function App() {
   const slides = [
@@ -165,11 +171,9 @@ export default function App() {
     { src: fortynine, title: "Wings @ Night" },
     { src: fifty, title: "Wings @ Night" },
     { src: fiftyone, title: "Wings @ Night" },
-    { src: fiftytwo, title: "Wings @ Night" },
     { src: fiftythree, title: "Wings @ Night" },
     { src: fiftyfour, title: "Wings @ Night" },
     { src: fiftyfive, title: "Wings @ Night" },
-    { src: fiftysix, title: "Wings @ Night" },
     { src: fiftyseven, title: "Wings @ Night" },
     { src: fiftyeight, title: "Wings @ Night" },
     { src: fiftynine, title: "Wings @ Night" },
@@ -177,24 +181,38 @@ export default function App() {
     { src: sixtyone, title: "Wings @ Night" },
     { src: sixtytwo, title: "Wings @ Night" },
     { src: sixtythree, title: "Wings @ Night" },
-    { src: sixtyfour, title: "Wings @ Night" },
     { src: sixtyfive, title: "Wings @ Night" },
     { src: sixtysix, title: "Wings @ Night" },
     { src: sixtyseven, title: "Wings @ Night" },
     { src: sixtyeight, title: "Wings @ Night" },
-    { src: sixtynine, title: "Wings @ Night" },
-    { src: seventy, title: "Wings @ Night" },
-    { src: seventyone, title: "Wings @ Night" },
-    { src: seventytwo, title: "Wings @ Night" },
-    { src: seventythree, title: "Wings @ Night" },
-    { src: seventyfour, title: "Wings @ Night" },
     { src: seventyfive, title: "Wings @ Night" },
-    { src: seventysix, title: "Wings @ Night" },
     { src: seventyseven, title: "Wings @ Night" },
     { src: seventyeight, title: "Wings @ Night" },
+    { src: gcdsCelebrationVid, title: "Wings Arena" },
   ];
 
-  const adSlides = [ad1, ad2, ad3, ad4, ad7, ad9, ad10];
+  const adSlides = [
+    ad1,
+    ad2,
+    ad3,
+    ad7,
+    ad9,
+    portrait1,
+    portrait2,
+    portrait3,
+    portrait4,
+    portrait5,
+    portrait6,
+    portrait7,
+    portrait8,
+    portrait9,
+    portrait10,
+    portrait11,
+    portrait12,
+    portrait13,
+    portrait14,
+    portrait15,
+  ];
 
   const shuffledSlides = useMemo(() => {
     const arr = [...slides];

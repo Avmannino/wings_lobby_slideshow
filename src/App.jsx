@@ -114,6 +114,7 @@ import portrait13 from "./assets/slides/76.jpg";
 import portrait14 from "./assets/slides/84.jpeg";
 import portrait15 from "./assets/slides/85.jpg";
 import portrait16 from "./assets/slides/86.jpeg";
+import portrait17 from "./assets/slides/87.jpg";
 
 export default function App() {
   const slides = [
@@ -217,6 +218,7 @@ export default function App() {
     portrait14,
     portrait15,
     portrait16,
+    portrait17,
   ];
 
   // Both slideshows shuffle internally (see ProgramSlideshow): every item plays

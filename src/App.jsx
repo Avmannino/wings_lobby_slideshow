@@ -81,6 +81,8 @@ import sixtyeight from "./assets/slides/68.jpg";
 import seventyfive from "./assets/slides/75.jpg";
 import seventyseven from "./assets/slides/77.jpg";
 import seventyeight from "./assets/slides/78.jpg";
+import eightytwo from "./assets/slides/82.jpeg";
+import eightythree from "./assets/slides/83.jpeg";
 
 // Videos
 import ltsVid from "./assets/slides/learntoskate.mp4";
@@ -111,6 +113,7 @@ import portrait12 from "./assets/slides/81.jpeg";
 import portrait13 from "./assets/slides/76.jpg";
 import portrait14 from "./assets/slides/84.jpeg";
 import portrait15 from "./assets/slides/85.jpg";
+import portrait16 from "./assets/slides/86.jpeg";
 
 export default function App() {
   const slides = [
@@ -187,6 +190,8 @@ export default function App() {
     { src: seventyfive, title: "Wings @ Night" },
     { src: seventyseven, title: "Wings @ Night" },
     { src: seventyeight, title: "Wings @ Night" },
+    { src: eightytwo, title: "Wings @ Night" },
+    { src: eightythree, title: "Wings @ Night" },
     { src: gcdsCelebrationVid, title: "Wings Arena" },
   ];
 
@@ -211,6 +216,7 @@ export default function App() {
     portrait13,
     portrait14,
     portrait15,
+    portrait16,
   ];
 
   // Both slideshows shuffle internally (see ProgramSlideshow): every item plays
